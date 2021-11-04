@@ -3,7 +3,7 @@
     <!-- banner -->
     <div class="home-banner">
       <div class="banner-container">
-        <h1 class="blog-title animated zoomIn">
+        <h1 class="blog-title animated zoomIn" @click="hhh">
           最佳实践
         </h1>
         <!-- 联系方式 -->
@@ -224,6 +224,9 @@ export default {
     this.reload()
   },
   methods: {
+    hhh () {
+      this.$router.push('/BlogComment')
+    },
     reload () {
       window.sessionStorage.setItem('reloadAdmin', 'true')
       const str = window.sessionStorage.getItem('reload')
@@ -359,7 +362,7 @@ export default {
     left: 0;
     right: 0;
     height: 100vh;
-    background: url("D:/blog-vue/src/assets/images/aa.png") center center /
+    background: url("D:/best-practices-vue/blog-vue/src/assets/images/aa.png") center center /
     cover no-repeat;
     background-color: #49b1f5;
     background-attachment: fixed;

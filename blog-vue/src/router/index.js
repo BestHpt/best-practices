@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Blog from '../views/Blog'
+// import BlogComment from '../views/BlogComment'
 import SearchModel from '../components/model/SearchModel'
 // import Welcome from '../views/admin/Welcome'
 // const Blog = () => import(/* webpackChunkName: "BW" */ '../views/Blog')
@@ -25,6 +26,7 @@ const Crawler = () => import(/* webpackChunkName: "Home_Types_Tag_Crawler" */ '.
 const CrawlerBlog = () => import(/* webpackChunkName: "Home_Types_Tag_Crawler" */ '../views/crawler/CrawlerBlog.vue')
 
 const Music = () => import(/* webpackChunkName: "Music" */ '../views/Music.vue')
+const BlogComment = () => import(/* webpackChunkName: "Music" */ '../views/BlogComment.vue')
 const Playlists = () => import(/* webpackChunkName: "Music" */ '../views/music/Playlists.vue')
 const Mvs = () => import(/* webpackChunkName: "Music" */ '../views/music/Mvs.vue')
 const Songs = () => import(/* webpackChunkName: "Music" */ '../views/music/Songs.vue')
@@ -74,6 +76,11 @@ const routes = [
     path: '/Blog',
     name: 'Blog',
     component: Blog
+  },
+  {
+    path: '/BlogComment',
+    name: 'BlogComment',
+    component: BlogComment
   },
   {
     path: '/Types',
