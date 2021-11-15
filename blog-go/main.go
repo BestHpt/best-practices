@@ -1,8 +1,8 @@
 package main
 
 import (
-	"best-practics/common"
 	"best-practics/common/global"
+	"best-practics/common/initialize"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -18,7 +18,7 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
-	global.Viper = common.InitViper()      // 初始化Viper
-	global.Logger = common.InitZap()       // 初始化zap日志库
+	global.Viper = initialize.InitViper() // 初始化Viper
+	global.Logger = initialize.InitZap()  // 初始化zap日志库
 
 }

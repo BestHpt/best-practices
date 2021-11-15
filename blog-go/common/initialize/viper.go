@@ -1,4 +1,7 @@
-package common
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package initialize
 
 import (
 	"best-practics/common/consts"
