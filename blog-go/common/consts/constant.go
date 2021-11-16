@@ -2,5 +2,5 @@ package consts
 
 const (
 	ConfigEnv  = "GlobalConfig"
-	ConfigFile = "config.yaml"
+	ConfigFile = "conf/config.yaml"
 )
