@@ -1,6 +1,3 @@
-/*
- * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
- */
 package initialize
 
 import (
@@ -97,7 +94,7 @@ func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.C
 
 // 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format(global.GlobalConfig.Zap.Prefix + " 2006/01/02 15:04:05"))
+	enc.AppendString(t.Format(global.GlobalConfig.Zap.Prefix + "[2006/01/02 15:04:05]"))
 }
 
 //@function: GetWriteSyncer
