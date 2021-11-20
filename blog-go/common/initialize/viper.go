@@ -1,8 +1,8 @@
 package initialize
 
 import (
+	"best-practics/common"
 	"best-practics/common/consts"
-	"best-practics/common/global"
 	"flag"
 	"fmt"
 	"github.com/fsnotify/fsnotify"
@@ -30,7 +30,6 @@ func InitViper(path ...string) *viper.Viper {
 		config = path[0]
 		fmt.Printf("您正在使用func Viper()传递的值,config的路径为%v\n", config)
 	}
-
 	v := viper.New()
 	v.SetConfigFile(config)
 	v.SetConfigType("yaml")
@@ -42,11 +41,11 @@ func InitViper(path ...string) *viper.Viper {
 
 	v.OnConfigChange(func(e fsnotify.Event) {
 		fmt.Println("config file changed:", e.Name)
-		if err := v.Unmarshal(&global.GlobalConfig); err != nil {
+		if err := v.Unmarshal(&common.GlobalConfig); err != nil {
 			fmt.Println(err)
 		}
 	})
-	if err := v.Unmarshal(&global.GlobalConfig); err != nil {
+	if err := v.Unmarshal(&common.GlobalConfig); err != nil {
 		fmt.Println(err)
 	}
 	return v

@@ -5,20 +5,6 @@ aliyun-oss:
   bucket-name: yourBucketName
   bucket-url: yourBucketUrl
   base-path: yourBasePath
-autocode:
-  transfer-restart: true
-  root: /Users/didi/code/golang/gin-vue-admin
-  server: /server
-  server-api: /api/v1/autocode
-  server-initialize: /initialize
-  server-model: /model/autocode
-  server-request: /model/autocode/request/
-  server-router: /router/autocode
-  server-service: /service/autocode
-  web: /web/src
-  web-api: /api
-  web-form: /view
-  web-table: /view
 captcha:
   key-long: 6
   img-width: 240
@@ -52,14 +38,6 @@ mysql:
   max-open-conns: 0
   log-mode: ""
   log-zap: false
-qiniu:
-  zone: ZoneHuaDong
-  bucket: ""
-  img-path: ""
-  use-https: false
-  access-key: ""
-  secret-key: ""
-  use-cdn-domains: false
 redis:
   db: 0
   addr: 127.0.0.1:6379

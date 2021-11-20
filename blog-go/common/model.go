@@ -1,4 +1,7 @@
-package global
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package common
 
 import (
 	"time"

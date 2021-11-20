@@ -1,7 +1,8 @@
 package initialize
 
 import (
-	"best-practics/common/global"
+	"best-practics/common"
+	log2 "best-practics/utils/log"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -127,8 +128,8 @@ func (c *_logger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 }
 
 func (c *_logger) Printf(message string, data ...interface{}) {
-	if global.GlobalConfig.Mysql.LogZap {
-		global.Logger.Info(fmt.Sprintf(message, data...))
+	if common.GlobalConfig.Mysql.LogZap {
+		log2.Info(fmt.Sprintf(message, data...))
 	} else {
 		c.Writer.Printf(message, data...)
 	}

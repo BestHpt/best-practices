@@ -1,8 +1,9 @@
 package initialize
 
 import (
-	"best-practics/common/global"
+	"best-practics/common"
 	"best-practics/domain/entity"
+	"best-practics/utils/log"
 	"database/sql"
 	"fmt"
 	"testing"
@@ -10,21 +11,23 @@ import (
 
 var db *sql.DB
 
-func init() {
-	global.Viper = InitViper("../../conf/config.yaml") // 初始化Viper
-	global.Logger = InitZap()                       // 初始化zap日志库
-	global.GVA_DB = InitGorm()                      // gorm连接数据库
-	if global.GVA_DB != nil {
-		MysqlTables(global.GVA_DB) // 初始化表
+// 这里不用小写默认，防止再测试其他单测文件时也跑到这里
+func Init() {
+	common.Viper = InitViper("../../conf/config.yaml") // 初始化Viper
+	log.InitZap()                                      // 初始化zap日志库
+	common.GVA_DB = InitGorm()                         // gorm连接数据库
+	if common.GVA_DB != nil {
+		MysqlTables(common.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接
-		db, _ = global.GVA_DB.DB()
+		db, _ = common.GVA_DB.DB()
 	}
 }
 
 func TestGorm(t *testing.T) {
+	Init()
 	defer db.Close()
 	var blogType entity.BlogType
-	err := global.GVA_DB.Where("id = ?", 1).First(&blogType).Error
+	err := common.GVA_DB.Where("id = ?", 1).First(&blogType).Error
 	if err != nil {
 		t.Error(err)
 	} else {
@@ -67,11 +70,12 @@ type Field struct {
 }
 
 func TestAutoCode(t *testing.T) {
+	Init()
 	defer db.Close()
 	tableName := "blog"
 	dbName := "blog"
 	var Columns []ColumnReq
-	err := global.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c." +
+	err := common.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c." +
 		"CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT column_comment " +
 		"FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columns).Error
 

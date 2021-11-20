@@ -1,10 +1,7 @@
 package utils
 
 import (
-	"best-practics/common/global"
-	"go.uber.org/zap"
 	"os"
-
 )
 
 //@function: PathExists
@@ -33,9 +30,8 @@ func CreateDir(dirs ...string) (err error) {
 			return err
 		}
 		if !exist {
-			global.Logger.Debug("create directory" + v)
+			print("create directory" + v)
 			if err := os.MkdirAll(v, os.ModePerm); err != nil {
-				global.Logger.Error("create directory"+v, zap.Any(" error:", err))
 				return err
 			}
 		}
