@@ -1,7 +1,10 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package log
 
 import (
-	"best-practics/common/global"
+	"best-practics/common"
 	"best-practics/utils"
 	"fmt"
 	"os"
@@ -12,10 +15,10 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-func InitZap() (logger *zap.Logger) {
-	if ok, _ := utils.PathExists(global.GlobalConfig.Zap.Director); !ok { // 判断是否有Director文件夹
-		fmt.Printf("create %v directory\n", global.GlobalConfig.Zap.Director)
-		_ = os.Mkdir(global.GlobalConfig.Zap.Director, os.ModePerm)
+func InitZap() {
+	if ok, _ := utils.PathExists(common.GlobalConfig.Zap.Director); !ok { // 判断是否有Director文件夹
+		fmt.Printf("create %v directory\n", common.GlobalConfig.Zap.Director)
+		_ = os.Mkdir(common.GlobalConfig.Zap.Director, os.ModePerm)
 	}
 	// 调试级别
 	debugPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
@@ -35,17 +38,19 @@ func InitZap() (logger *zap.Logger) {
 	})
 
 	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/server_debug.log", global.GlobalConfig.Zap.Director), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_info.log", global.GlobalConfig.Zap.Director), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_warn.log", global.GlobalConfig.Zap.Director), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_error.log", global.GlobalConfig.Zap.Director), errorPriority),
+		getEncoderCore(fmt.Sprintf("./%s/server_debug.log", common.GlobalConfig.Zap.Director), debugPriority),
+		getEncoderCore(fmt.Sprintf("./%s/server_info.log", common.GlobalConfig.Zap.Director), infoPriority),
+		getEncoderCore(fmt.Sprintf("./%s/server_warn.log", common.GlobalConfig.Zap.Director), warnPriority),
+		getEncoderCore(fmt.Sprintf("./%s/server_error.log", common.GlobalConfig.Zap.Director), errorPriority),
 	}
-	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
+	//logger := zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
+	logger := zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller(), zap.AddCallerSkip(1))
 
-	if global.GlobalConfig.Zap.ShowLine {
-		logger = logger.WithOptions(zap.AddCaller())
+	if common.GlobalConfig.Zap.ShowLine {
+		//logger = logger.WithOptions(zap.AddCaller())
+		logger = logger.WithOptions(zap.AddCallerSkip(2))
 	}
-	return logger
+	Log.logger = logger
 }
 
 // getEncoderConfig 获取zapcore.EncoderConfig
@@ -56,7 +61,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		TimeKey:        "time",
 		NameKey:        "logger",
 		CallerKey:      "caller",
-		StacktraceKey:  global.GlobalConfig.Zap.StacktraceKey,
+		StacktraceKey:  common.GlobalConfig.Zap.StacktraceKey,
 		LineEnding:     zapcore.DefaultLineEnding,
 		EncodeLevel:    zapcore.LowercaseLevelEncoder,
 		EncodeTime:     CustomTimeEncoder,
@@ -64,13 +69,13 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
 	switch {
-	case global.GlobalConfig.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
+	case common.GlobalConfig.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
 		config.EncodeLevel = zapcore.LowercaseLevelEncoder
-	case global.GlobalConfig.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
+	case common.GlobalConfig.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
 		config.EncodeLevel = zapcore.LowercaseColorLevelEncoder
-	case global.GlobalConfig.Zap.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
+	case common.GlobalConfig.Zap.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
 		config.EncodeLevel = zapcore.CapitalLevelEncoder
-	case global.GlobalConfig.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
+	case common.GlobalConfig.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
 		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	default:
 		config.EncodeLevel = zapcore.LowercaseLevelEncoder
@@ -80,7 +85,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 
 // getEncoder 获取zapcore.Encoder
 func getEncoder() zapcore.Encoder {
-	if global.GlobalConfig.Zap.Format == "json" {
+	if common.GlobalConfig.Zap.Format == "json" {
 		return zapcore.NewJSONEncoder(getEncoderConfig())
 	}
 	return zapcore.NewConsoleEncoder(getEncoderConfig())
@@ -94,7 +99,7 @@ func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.C
 
 // 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format(global.GlobalConfig.Zap.Prefix + "[2006/01/02 15:04:05]"))
+	enc.AppendString(t.Format("2006/01/02 15:04:05"))
 }
 
 //@function: GetWriteSyncer
@@ -108,8 +113,9 @@ func GetWriteSyncer(file string) zapcore.WriteSyncer {
 		rotatelogs.WithRotationTime(time.Minute),
 	)
 
-	if global.GlobalConfig.Zap.LogInConsole {
+	if common.GlobalConfig.Zap.LogInConsole {
 		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(logf))
 	}
 	return zapcore.AddSync(logf)
 }
+

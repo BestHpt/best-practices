@@ -1,8 +1,9 @@
 package initialize
 
 import (
-	"best-practics/common/global"
+	"best-practics/common"
 	"best-practics/domain/entity"
+	"best-practics/utils/log"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,7 +17,7 @@ import (
 //@return: *gorm.DB
 
 func InitGorm() *gorm.DB {
-	switch global.GlobalConfig.System.DbType {
+	switch common.GlobalConfig.System.DbType {
 	case "mysql":
 		return GormMysql()
 	default:
@@ -35,10 +36,10 @@ func MysqlTables(db *gorm.DB) {
 		entity.BlogType{},
 	)
 	if err != nil {
-		global.Logger.Error("register table failed", zap.Any("err", err))
+		log.Error("register table failed", zap.Any("err", err))
 		os.Exit(0)
 	}
-	global.Logger.Info("register table success")
+	log.Info("register table success")
 }
 
 //@author: SliverHorn
@@ -47,7 +48,7 @@ func MysqlTables(db *gorm.DB) {
 //@return: *gorm.DB
 
 func GormMysql() *gorm.DB {
-	m := global.GlobalConfig.Mysql
+	m := common.GlobalConfig.Mysql
 	if m.Dbname == "" {
 		return nil
 	}
@@ -61,7 +62,7 @@ func GormMysql() *gorm.DB {
 		SkipInitializeWithVersion: false, // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
-		//global.Logger.Error("MySQL启动异常", zap.Any("err", err))
+		//log.Error("MySQL启动异常", zap.Any("err", err))
 		//os.Exit(0)
 		//return nil
 		return nil
@@ -81,7 +82,7 @@ func GormMysql() *gorm.DB {
 
 func gormConfig() *gorm.Config {
 	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
-	switch global.GlobalConfig.Mysql.LogMode {
+	switch common.GlobalConfig.Mysql.LogMode {
 	case "silent", "Silent":
 		config.Logger = Default.LogMode(logger.Silent)
 	case "error", "Error":
