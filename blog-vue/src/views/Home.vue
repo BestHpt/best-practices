@@ -22,6 +22,7 @@
       </div>
       <!--中间内容,如果太窄了可放到container    <div  class="m-container m-padded-tb-big">-->
     </div>
+
     <div  class="m-home">
       <div class="ui container">
         <div class="ui stackable grid">
@@ -41,7 +42,6 @@
 
             <!--content-->
             <div class="ui attached  segment my-blog-shadow">
-
               <div class="ui padded vertical segment m-padded-tb-large" v-for="item in dataList" :key="item.blogId">
                 <div class="ui middle aligned mobile reversed stackable grid">
                   <div class="eleven wide column" style="cursor:pointer;">
@@ -95,12 +95,10 @@
                 </el-pagination>
               </div>
             </div>
-
           </div>
 
           <!--右边的top-->
           <div class="five wide column" style="left: 34px !important;">
-
             <!--分类-->
             <div class="ui segments my-shadow">
               <div class="ui secondary segment">
@@ -362,7 +360,7 @@ export default {
     left: 0;
     right: 0;
     height: 100vh;
-    background: url("D:/best-practices-vue/blog-vue/src/assets/images/aa.png") center center /
+    background: url("../assets/images/aa.png") center center /
     cover no-repeat;
     background-color: #49b1f5;
     background-attachment: fixed;

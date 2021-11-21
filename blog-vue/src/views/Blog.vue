@@ -4,7 +4,7 @@
       <h1 class="banner-title">博客详情</h1>
     </div>
     <!--中间内容-->
-    <div id="waypoint" class="m-container-small m-blog animated fadeInLeft">
+    <div id="waypoint" class="m-container-small m-flex  m-blog animated fadeInLeft">
       <div class="ui container">
         <div class="ui top attached segment">
           <div class="ui horizontal link list">
@@ -39,6 +39,7 @@
 
           <!--标签-->
           <div class="m-padded-lr-responsive">
+</div>
 <!--            <div class="ui basic teal left pointing label" v-for="item in tagList" :key="item.tagId">{{item.tagName}}</div>-->
           </div>
 
@@ -61,7 +62,7 @@
             </div>
           </div>
 
-        </div>
+      
         <div class="ui attached positive message">
           <!--博客信息-->
           <div class="ui middle aligned grid">
@@ -174,13 +175,35 @@
           </div>
         </div>
       </div>
+       <!--右边的top-->
+      <div class="five wide column m-l" style="left: 34px !important;">
+        <!--目录-->
+        <div class="ui segments my-shadow">
+          <div class="ui secondary segment ">
+            <i class="idea icon"></i>目录
+          </div>
+          <div class="ui segment" v-for="item in latestList" :key="item.blogId">
+            <a  target="_blank" class="m-black m-text-thin" style="cursor:pointer;" v-text="item.title" @click="toBlog(item.blogId)"></a>
+          </div>
+        </div>
+
+        <!--最新推荐-->
+        <div class="ui segments m-margin-top-large my-shadow">
+          <div class="ui secondary segment ">
+            <i class="bookmark icon"></i>最新推荐
+          </div>
+          <div class="ui segment" v-for="item in latestList" :key="item.blogId">
+            <a  target="_blank" class="m-black m-text-thin" style="cursor:pointer;" v-text="item.title" @click="toBlog(item.blogId)"></a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div id="toolbar" class="m-padded m-fixed m-right-bottom" >
       <div class="ui vertical icon buttons ">
-        <button type="button" class="ui toc blue button" >目录</button>
+        <!-- <button type="button" class="ui toc blue button" >目录</button>
         <a href="#comment-container" class="ui blue button" >留言</a>
-        <button class="ui wechat icon button"><i class="weixin icon"></i></button>
+        <button class="ui wechat icon button"><i class="weixin icon"></i></button> -->
         <button class="ui icon button" @click="thumbsUp">
           <i v-if="thumbsFlag" class="thumbs up icon"></i>
           <i v-else class="thumbs up outline icon"></i>
@@ -194,12 +217,12 @@
     </div>
 
     <div id="qrcode" class="ui wechat-qr flowing popup transition hidden " style="width: 130px !important;">
-<!--      <img src="../assets/images/wechat.jpg" alt="" class="ui rounded image" style="width: 120px !important;">-->
+     <!-- <img src="../assets/images/wechat.jpg" alt="" class="ui rounded image" style="width: 120px !important;"> -->
     </div>
 
     <br>
     <br>
-    <Footer></Footer>
+    <!-- <Footer></Footer> -->
   </div>
 
 </template>
@@ -207,12 +230,12 @@
 import Prism from '../assets/lib/prism/prism'
 // import QRCode from '../assets/lib/qrcode/qrcode.min.js'
 import QRCode from 'qrcodejs2'
-import Footer from '../components/layout/Footer'
+// import Footer from '../components/layout/Footer'
 
 export default {
   // 注册组件
   components: {
-    Footer
+    // Footer
   },
   data () {
     return {
@@ -224,6 +247,7 @@ export default {
       uid: '',
       user: {},
       nickname: '',
+      latestList: [], // 最新发布的博客列表的数据
       // 被激活的链接地址
       avatar: '',
       dataList: [],
@@ -235,8 +259,13 @@ export default {
     this.getUser()
     this.getOneBlog()
     this.getCommentList()
+    this.getLatestList()//右侧
   },
   methods: {
+     async getLatestList () {
+      const { data: res } = await this.$http.get('/api/server/home/latestList')
+      this.latestList = res.data
+    },
     async thumbsUp () {
       if (this.toLogin()) {
         const blogId = sessionStorage.getItem('blogId')
@@ -416,7 +445,14 @@ export default {
   @import "../assets/css/typo.css";
   @import "../assets/css/animate.css";
   .container{
+    margin-right: 50px;
     animation: main 1s;
+  }
+  .m-l {
+    margin-left: 30px;
+  }
+  .m-flex {
+    display: flex;
   }
   .m-blog {
     padding-top: 69vh !important;
