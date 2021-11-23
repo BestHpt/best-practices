@@ -1,4 +1,5 @@
 module.exports = {
+  lintOnSave:false,
   devServer: {
     proxy: {
       '/api': {
@@ -50,7 +51,7 @@ module.exports = {
         }
       }
     },
-    before: app => {}
+    before: app => {},
   },
   chainWebpack: config => {
     // 发布模式

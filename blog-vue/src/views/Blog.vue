@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+ 
     <div class="blog-banner banner">
       <h1 class="banner-title">博客详情</h1>
     </div>
@@ -175,15 +176,17 @@
           </div>
         </div>
       </div>
-       <!--右边的top-->
+
+      <!--右边的top-->
       <div class="five wide column m-l" style="left: 34px !important;">
         <!--目录-->
         <div class="ui segments my-shadow">
-          <div class="ui secondary segment ">
-            <i class="idea icon"></i>目录
+          <div class="ui secondary segment category-fix">
+            <i class="idea icon"></i>
+            目录
           </div>
-          <div class="ui segment" v-for="item in latestList" :key="item.blogId">
-            <a  target="_blank" class="m-black m-text-thin" style="cursor:pointer;" v-text="item.title" @click="toBlog(item.blogId)"></a>
+            <div class="ui segment">
+            <div class="js-toc"></div>
           </div>
         </div>
 
@@ -197,13 +200,14 @@
           </div>
         </div>
       </div>
+       
     </div>
 
     <div id="toolbar" class="m-padded m-fixed m-right-bottom" >
       <div class="ui vertical icon buttons ">
-        <!-- <button type="button" class="ui toc blue button" >目录</button>
+        <button type="button" class="ui toc blue button" >目录</button>
         <a href="#comment-container" class="ui blue button" >留言</a>
-        <button class="ui wechat icon button"><i class="weixin icon"></i></button> -->
+        <button class="ui wechat icon button"><i class="weixin icon"></i></button>
         <button class="ui icon button" @click="thumbsUp">
           <i v-if="thumbsFlag" class="thumbs up icon"></i>
           <i v-else class="thumbs up outline icon"></i>
@@ -270,6 +274,7 @@ export default {
       if (this.toLogin()) {
         const blogId = sessionStorage.getItem('blogId')
         const { data: res } = await this.$http.get(`/api/server/blog/${blogId}/${this.uid}`)
+        console.log("aaaahh"+ res)
         if (res.flag) {
           this.$message.success(res.message)
           this.thumbsFlag = true
@@ -449,10 +454,12 @@ export default {
     animation: main 1s;
   }
   .m-l {
+    width: 300px;
     margin-left: 30px;
   }
   .m-flex {
     display: flex;
+    /* position: relative; */
   }
   .m-blog {
     padding-top: 69vh !important;
@@ -463,5 +470,8 @@ export default {
     background: url(https://r.photo.store.qq.com/psc?/V53KcXfb1umonn4HbITu3rINxs43TczD/45NBuzDIW489QBoVep5mcSPhM*LqG*bYzP4o2JVbahf8eHd4Yd9FO1B4n8UbWJRaQANKT1EBypIfvSNRueI1LSu6d212FUoavpm63ZrUI3E!/r) center
     center / cover no-repeat;
     background-color: #49b1f5;
+  }
+  .category-fix {
+
   }
 </style>
