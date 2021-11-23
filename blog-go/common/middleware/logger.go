@@ -5,6 +5,7 @@ import (
 	"best-practics/common/consts"
 	"best-practics/utils/log"
 	"context"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 	"net"
 	"net/http"
@@ -21,16 +22,21 @@ import (
 func SetLoggerMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		start := time.Now()
-		ctx := context.WithValue(context.Background(), consts.TraceKey, &common.Trace{TraceId: "123", Caller: "blog", UserId: 666})
+		uuidStr := strings.ReplaceAll(uuid.New().String(), "-", "")
+		path := c.Request.URL.Path
+		userId := c.GetInt("user_id")
+		ctx := context.WithValue(context.Background(), consts.TraceKey, &common.Trace{TraceId: uuidStr, Caller: path, UserId: userId})
 		c.Set(consts.TraceCtx,ctx)
 
 		c.Next()
 		cost := time.Since(start)
-		log.Info("_com_request_in",
+		log.Info("_com_request_info",
 			zap.Int("Status", c.Writer.Status()),
 			zap.String("Method", c.Request.Method),
 			zap.String("IP",c.ClientIP()),
-			zap.String("Path",c.Request.URL.Path),
+			zap.String("Path",path),
+			zap.String("TraceId", uuidStr),
+			zap.Int("UserId", userId),
 			zap.String("query", c.Request.URL.RawQuery),
 			zap.String("UserAgent",c.Request.UserAgent()),
 			zap.Duration("Cost",cost),
@@ -61,7 +67,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 						zap.String("request", string(httpRequest)),
 					)
 					// If the connection is dead, we can't write a status to it.
-					c.Error(err.(error)) // nolint: errcheck
+					_ = c.Error(err.(error)) // nolint: errcheck
 					c.Abort()
 					return
 				}
