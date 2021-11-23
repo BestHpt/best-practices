@@ -10,63 +10,63 @@ import (
 	"go.uber.org/zap"
 )
 
-type LogWrapper struct {
-	logger *zap.Logger
-}
-
-var Log LogWrapper
+//type LogWrapper struct {
+//	logger *zap.Logger
+//}
+//
+//var Log LogWrapper
 
 func Debug(tag string, fields ...zap.Field) {
-	Log.logger.Debug(tag, fields...)
+	common.Logger.Debug(tag, fields...)
 }
 
 func DebugF(ctx context.Context, tag string, fields ...zap.Field) {
 	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	Log.logger.Debug(tag,
+	common.Logger.Debug(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Info(tag string, fields ...zap.Field) {
-	Log.logger.Info(tag, fields...)
+	common.Logger.Info(tag, fields...)
 }
 
 func InfoF(ctx context.Context, tag string, fields ...zap.Field) {
 	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	Log.logger.Info(tag,
+	common.Logger.Info(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Warn(tag string, fields ...zap.Field) {
-	Log.logger.Warn(tag, fields...)
+	common.Logger.Warn(tag, fields...)
 }
 
 func WarnF(ctx context.Context, tag string, fields ...zap.Field) {
 	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	Log.logger.Warn(tag,
+	common.Logger.Warn(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Error(tag string, fields ...zap.Field) {
-	Log.logger.Error(tag, fields...)
+	common.Logger.Error(tag, fields...)
 }
 
 func ErrorF(ctx context.Context, tag string, fields ...zap.Field) {
 	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	Log.logger.Error(tag,
+	common.Logger.Error(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Fatal(tag string, fields ...zap.Field) {
-	Log.logger.Fatal(tag, fields...)
+	common.Logger.Fatal(tag, fields...)
 }
 
 func FatalF(ctx context.Context, tag string, fields ...zap.Field) {
 	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	Log.logger.Fatal(tag,
+	common.Logger.Fatal(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }

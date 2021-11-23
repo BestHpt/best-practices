@@ -3,7 +3,6 @@ package middleware
 import (
 	"best-practics/common"
 	"best-practics/common/consts"
-	"best-practics/utils/log"
 	"context"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -30,7 +29,7 @@ func SetLoggerMiddleware() gin.HandlerFunc {
 
 		c.Next()
 		cost := time.Since(start)
-		log.Info("_com_request_info",
+		common.Logger.Info("_com_request_info",
 			zap.Int("Status", c.Writer.Status()),
 			zap.String("Method", c.Request.Method),
 			zap.String("IP",c.ClientIP()),
@@ -62,7 +61,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					log.Error(c.Request.URL.Path,
+					common.Logger.Error(c.Request.URL.Path,
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)
@@ -73,13 +72,13 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				}
 
 				if stack {
-					log.Error("[Recovery from panic]",
+					common.Logger.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 						zap.String("stack", string(debug.Stack())),
 					)
 				} else {
-					log.Error("[Recovery from panic]",
+					common.Logger.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)

@@ -39,7 +39,7 @@ func MysqlTables(db *gorm.DB) {
 		log.Error("register table failed", zap.Any("err", err))
 		os.Exit(0)
 	}
-	log.Info("register table success")
+	common.Logger.Info("register table success")
 }
 
 //@author: SliverHorn

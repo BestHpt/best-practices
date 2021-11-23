@@ -4,7 +4,6 @@ import (
 	"best-practics/common"
 	"best-practics/common/middleware"
 	"best-practics/interfaces/router"
-	"best-practics/utils/log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -21,9 +20,9 @@ func Routers() *gin.Engine {
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	// 跨域
 	//Router.Use(middleware.Cors()) // 如需跨域可以打开
-	log.Info("use middleware cors")
+	common.Logger.Info("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	log.Info("register swagger handler")
+	common.Logger.Info("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 
 	//获取路由组实例
@@ -42,6 +41,6 @@ func Routers() *gin.Engine {
 		blogRouter.InitBlogRouter(PublicGroup)                      // 注册BLOG相关路由
 	}
 
-	log.Info("router register success")
+	common.Logger.Info("router register success")
 	return Router
 }

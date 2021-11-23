@@ -6,14 +6,12 @@ package log
 import (
 	"best-practics/common"
 	"best-practics/common/consts"
-	"best-practics/common/initialize"
 	"context"
 	"go.uber.org/zap"
 	"testing"
 )
 
 func TestInfof(t *testing.T) {
-	common.Viper = initialize.InitViper("../../conf/config.yaml") // 初始化Viper
 	InitZap()
 	ctx := context.WithValue(context.Background(), consts.TraceKey, &common.Trace{TraceId: "123", Caller: "blog", UserId: 666})
 
