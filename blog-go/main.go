@@ -43,7 +43,7 @@ func main() {
 	// 保证文本顺序输出
 	// In order to ensure that the text order output can be deleted
 	time.Sleep(10 * time.Microsecond)
-	log.Info("server run success on ", zap.String("address", address))
+	common.Logger.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
 	欢迎使用 best-practices
@@ -53,7 +53,7 @@ func main() {
 	默认前端文件运行地址:http://127.0.0.1:8080
 	默认后端测试路径:http://127.0.0.1%s/blog
 `, address, address)
-	log.Error(s.ListenAndServe().Error())
+	common.Logger.Error(s.ListenAndServe().Error())
 
 }
 

@@ -50,7 +50,7 @@ func InitZap() {
 		//logger = logger.WithOptions(zap.AddCaller())
 		logger = logger.WithOptions(zap.AddCallerSkip(2))
 	}
-	Log.logger = logger
+	common.Logger = logger
 }
 
 // getEncoderConfig 获取zapcore.EncoderConfig
