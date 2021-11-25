@@ -1,9 +1,9 @@
 package blog
 
 import (
-	"best-practics/common"
 	"best-practics/common/c_error"
-	"best-practics/utils/log"
+	"best-practics/common/initialize/log"
+	"best-practics/common/trace"
 	"best-practics/utils/response"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -29,7 +29,7 @@ func (e *BlogRouter) InitBlogRouter(Router *gin.RouterGroup) {
 // @Failure 400 {string} string "{"msg": "who are you"}"
 // @Router /blog [get]
 func HandleHello(c *gin.Context) {
-	ctx := common.GetTraceCtx(c)
+	ctx := trace.GetTraceCtx(c)
 	// c.JSON：返回JSON格式的数据
 	log.WarnF(ctx,c_error.BookNotFoundError.String(),zap.String("test","666"))
 	who := c.Query("who")

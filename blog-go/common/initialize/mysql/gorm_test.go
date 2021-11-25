@@ -1,9 +1,13 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package mysql
 
 import (
 	"best-practics/common"
+	"best-practics/common/initialize/log"
+	"best-practics/common/initialize/viper"
 	"best-practics/domain/entity"
-	"best-practics/utils/log"
 	"database/sql"
 	"fmt"
 	"testing"
@@ -13,9 +17,9 @@ var db *sql.DB
 
 // 这里不用小写默认，防止再测试其他单测文件时也跑到这里
 func Init() {
-	common.Viper = InitViper("../../conf/config.yaml") // 初始化Viper
-	log.InitZap()                                      // 初始化zap日志库
-	common.GVA_DB = InitGorm()                         // gorm连接数据库
+	common.Viper = viper.Init("../../conf/logConfig.yaml") // 初始化Viper
+	log.InitZap()                                          // 初始化zap日志库
+	common.GVA_DB = Init()                                 // gorm连接数据库
 	if common.GVA_DB != nil {
 		MysqlTables(common.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接

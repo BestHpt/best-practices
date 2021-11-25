@@ -2,11 +2,14 @@ package main
 
 import (
 	"best-practics/common"
-	"best-practics/common/initialize"
-	"best-practics/utils/log"
+	"best-practics/common/config"
+	"best-practics/common/initialize/log"
+	"best-practics/common/initialize/mysql"
+	"best-practics/common/initialize/router"
+	"best-practics/common/initialize/server"
+	"best-practics/common/initialize/viper"
 	"fmt"
 	"go.uber.org/zap"
-	"time"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -26,27 +29,23 @@ import (
 // @BasePath /
 func main() {
 	//1、初始化Viper
-	common.Viper = initialize.InitViper()
+	common.Viper = viper.Init()
 	//2、初始化zap日志库
 	log.InitZap()
 	//3、gorm连接数据库
-	common.GVA_DB = initialize.InitGorm()
+	common.GVA_DB = mysql.Init()
 	if common.GVA_DB != nil {
-		initialize.MysqlTables(common.GVA_DB) // 初始化表
+		mysql.MysqlTables(common.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接
 		db, _ := common.GVA_DB.DB()
 		defer db.Close()
 	}
 	//4、设置routers
-	Router := initialize.Routers()
-
+	Router := router.Init()
 	//5、初始化gin server
-	address := fmt.Sprintf(":%d", common.GlobalConfig.System.Addr)
-	s := initialize.InitServer(address, Router)
-	// 保证文本顺序输出
-	// In order to ensure that the text order output can be deleted
-	time.Sleep(10 * time.Microsecond)
-	common.Logger.Info("server run success on ", zap.String("address", address))
+	address := fmt.Sprintf(":%d", config.ConfigCenter.System.Addr)
+	s := server.Init(address, Router)
+	log.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
 	欢迎使用 best-practices
@@ -56,7 +55,7 @@ func main() {
 	默认前端文件运行地址:http://127.0.0.1:8080
 	默认后端测试路径:http://127.0.0.1%s/blog
 `, address, address)
-	common.Logger.Error(s.ListenAndServe().Error())
+	log.Error(s.ListenAndServe().Error())
 
 }
 

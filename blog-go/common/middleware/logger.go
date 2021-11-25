@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"best-practics/common"
 	"best-practics/common/consts"
+	"best-practics/common/initialize/log"
+	"best-practics/common/trace"
 	"context"
 	"github.com/google/uuid"
 	"go.uber.org/zap"
@@ -24,12 +25,12 @@ func SetLoggerMiddleware() gin.HandlerFunc {
 		uuidStr := strings.ReplaceAll(uuid.New().String(), "-", "")
 		path := c.Request.URL.Path
 		userId := c.GetInt("user_id")
-		ctx := context.WithValue(context.Background(), consts.TraceKey, &common.Trace{TraceId: uuidStr, Caller: path, UserId: userId})
+		ctx := context.WithValue(context.Background(), consts.TraceKey, &trace.Trace{TraceId: uuidStr, Caller: path, UserId: userId})
 		c.Set(consts.TraceCtx,ctx)
 
 		c.Next()
 		cost := time.Since(start)
-		common.Logger.Info("_com_request_info",
+		log.Info("_com_request_info",
 			zap.Int("Status", c.Writer.Status()),
 			zap.String("Method", c.Request.Method),
 			zap.String("IP",c.ClientIP()),
@@ -61,7 +62,7 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 
 				httpRequest, _ := httputil.DumpRequest(c.Request, false)
 				if brokenPipe {
-					common.Logger.Error(c.Request.URL.Path,
+					log.Error(c.Request.URL.Path,
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)
@@ -72,13 +73,13 @@ func GinRecovery(stack bool) gin.HandlerFunc {
 				}
 
 				if stack {
-					common.Logger.Error("[Recovery from panic]",
+					log.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 						zap.String("stack", string(debug.Stack())),
 					)
 				} else {
-					common.Logger.Error("[Recovery from panic]",
+					log.Error("[Recovery from panic]",
 						zap.Any("error", err),
 						zap.String("request", string(httpRequest)),
 					)

@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
  */
-package common
+package trace
 
 import (
 	"best-practics/common/consts"
