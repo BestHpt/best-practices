@@ -46,10 +46,6 @@ func InitZap() {
 	//logger := zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 	logger := zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller(), zap.AddCallerSkip(1))
 
-	if common.GlobalConfig.Zap.ShowLine {
-		//logger = logger.WithOptions(zap.AddCaller())
-		logger = logger.WithOptions(zap.AddCallerSkip(2))
-	}
 	common.Logger = logger
 }
 

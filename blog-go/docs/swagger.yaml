@@ -1,0 +1,36 @@
+basePath: /
+info:
+  contact:
+    email: 948748073@qq.com
+    name: besthpt.github.io
+    url: 948748073@qq.com
+  description: This is a sample Server pets
+  termsOfService: https://besthpt.github.io/
+  title: Swagger Example API
+  version: 0.0.1
+paths:
+  /blog:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 人名
+        in: query
+        name: who
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+        "400":
+          description: '{"msg": "who are you"}'
+          schema:
+            type: string
+      summary: 获取文章信息
+      tags:
+      - 文章操作
+swagger: "2.0"
