@@ -1,9 +1,9 @@
 package response
 
 import (
-	"best-practics/common"
 	"best-practics/common/consts"
-	"best-practics/utils/log"
+	"best-practics/common/initialize/log"
+	trace2 "best-practics/common/trace"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
@@ -13,8 +13,8 @@ const (
 )
 
 func Result(c *gin.Context, errCode int, msg string, data interface{}) {
-	ctx := common.GetTraceCtx(c)
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
+	ctx := trace2.GetTraceCtx(c)
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
 	log.Info("_com_request_out",
 		zap.String("trace_id", trace.TraceId),
 		zap.Int("user_id", trace.UserId),

@@ -18,3 +18,5 @@ type GlobalConfig struct {
 	Excel      Excel      `mapstructure:"excel" json:"excel" yaml:"excel"`
 	Timer      Timer      `mapstructure:"timer" json:"timer" yaml:"timer"`
 }
+
+var ConfigCenter = &GlobalConfig{}

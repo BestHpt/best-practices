@@ -1,4 +1,7 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package server
 
 import (
 	"github.com/fvbock/endless"
@@ -10,7 +13,7 @@ type Server interface {
 	ListenAndServe() error
 }
 
-func InitServer(address string, router *gin.Engine) Server {
+func Init(address string, router *gin.Engine) Server {
 	s := endless.NewServer(address, router)
 	s.ReadHeaderTimeout = 10 * time.Second
 	s.WriteTimeout = 10 * time.Second

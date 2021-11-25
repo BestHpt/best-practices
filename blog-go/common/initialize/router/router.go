@@ -1,7 +1,11 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package router
 
 import (
-	"best-practics/common"
+	"best-practics/common/config"
+	"best-practics/common/initialize/log"
 	"best-practics/common/middleware"
 	"best-practics/interfaces/router"
 	"net/http"
@@ -13,16 +17,16 @@ import (
 
 // 初始化总路由
 
-func Routers() *gin.Engine {
-	var Router = gin.Default()
+func Init() *gin.Engine {
+	var Router = gin.New()
 	Router.Use(middleware.SetLoggerMiddleware(),middleware.GinRecovery(true))
-	Router.StaticFS(common.GlobalConfig.Local.Path, http.Dir(common.GlobalConfig.Local.Path)) // 为文件提供本地静态地址
+	Router.StaticFS(config.ConfigCenter.Local.Path, http.Dir(config.ConfigCenter.Local.Path)) // 为文件提供本地静态地址
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	// 跨域
 	//Router.Use(middleware.Cors()) // 如需跨域可以打开
-	common.Logger.Info("use middleware cors")
+	log.Info("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	common.Logger.Info("register swagger handler")
+	log.Info("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 
 	//获取路由组实例
@@ -41,6 +45,6 @@ func Routers() *gin.Engine {
 		blogRouter.InitBlogRouter(PublicGroup)                      // 注册BLOG相关路由
 	}
 
-	common.Logger.Info("router register success")
+	log.Info("router register success")
 	return Router
 }

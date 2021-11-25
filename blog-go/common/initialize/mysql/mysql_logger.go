@@ -1,8 +1,11 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package mysql
 
 import (
-	"best-practics/common"
-	log2 "best-practics/utils/log"
+	"best-practics/common/config"
+	mLog "best-practics/common/initialize/log"
 	"context"
 	"fmt"
 	"io/ioutil"
@@ -14,15 +17,15 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-type config struct {
+type logConfig struct {
 	SlowThreshold time.Duration
 	Colorful      bool
 	LogLevel      logger.LogLevel
 }
 
 var (
-	Discard = New(log.New(ioutil.Discard, "", log.LstdFlags), config{})
-	Default = New(log.New(os.Stdout, "\r\n", log.LstdFlags), config{
+	Discard = New(log.New(ioutil.Discard, "", log.LstdFlags), logConfig{})
+	Default = New(log.New(os.Stdout, "\r\n", log.LstdFlags), logConfig{
 		SlowThreshold: 200 * time.Millisecond,
 		LogLevel:      logger.Warn,
 		Colorful:      true,
@@ -30,7 +33,7 @@ var (
 	Recorder = traceRecorder{Interface: Default, BeginAt: time.Now()}
 )
 
-func New(writer logger.Writer, config config) logger.Interface {
+func New(writer logger.Writer, config logConfig) logger.Interface {
 	var (
 		infoStr      = "%s\n[info] "
 		warnStr      = "%s\n[warn] "
@@ -51,7 +54,7 @@ func New(writer logger.Writer, config config) logger.Interface {
 
 	return &_logger{
 		Writer:       writer,
-		config:       config,
+		logConfig:    config,
 		infoStr:      infoStr,
 		warnStr:      warnStr,
 		errStr:       errStr,
@@ -62,7 +65,7 @@ func New(writer logger.Writer, config config) logger.Interface {
 }
 
 type _logger struct {
-	config
+	logConfig
 	logger.Writer
 	infoStr, warnStr, errStr            string
 	traceStr, traceErrStr, traceWarnStr string
@@ -128,8 +131,8 @@ func (c *_logger) Trace(ctx context.Context, begin time.Time, fc func() (string,
 }
 
 func (c *_logger) Printf(message string, data ...interface{}) {
-	if common.GlobalConfig.Mysql.LogZap {
-		log2.Info(fmt.Sprintf(message, data...))
+	if config.ConfigCenter.Mysql.LogZap {
+		mLog.Info(fmt.Sprintf(message, data...))
 	} else {
 		c.Writer.Printf(message, data...)
 	}

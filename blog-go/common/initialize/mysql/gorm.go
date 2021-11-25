@@ -1,9 +1,12 @@
-package initialize
+/*
+ * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
+ */
+package mysql
 
 import (
-	"best-practics/common"
+	"best-practics/common/config"
+	"best-practics/common/initialize/log"
 	"best-practics/domain/entity"
-	"best-practics/utils/log"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -16,8 +19,8 @@ import (
 //@description: 初始化数据库并产生数据库全局变量
 //@return: *gorm.DB
 
-func InitGorm() *gorm.DB {
-	switch common.GlobalConfig.System.DbType {
+func Init() *gorm.DB {
+	switch config.ConfigCenter.System.DbType {
 	case "mysql":
 		return GormMysql()
 	default:
@@ -39,7 +42,7 @@ func MysqlTables(db *gorm.DB) {
 		log.Error("register table failed", zap.Any("err", err))
 		os.Exit(0)
 	}
-	common.Logger.Info("register table success")
+	log.Info("register table success")
 }
 
 //@author: SliverHorn
@@ -48,7 +51,7 @@ func MysqlTables(db *gorm.DB) {
 //@return: *gorm.DB
 
 func GormMysql() *gorm.DB {
-	m := common.GlobalConfig.Mysql
+	m := config.ConfigCenter.Mysql
 	if m.Dbname == "" {
 		return nil
 	}
@@ -81,18 +84,18 @@ func GormMysql() *gorm.DB {
 //@return: *gorm.Config
 
 func gormConfig() *gorm.Config {
-	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
-	switch common.GlobalConfig.Mysql.LogMode {
+	gormConfigInstance := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
+	switch config.ConfigCenter.Mysql.LogMode {
 	case "silent", "Silent":
-		config.Logger = Default.LogMode(logger.Silent)
+		gormConfigInstance.Logger = Default.LogMode(logger.Silent)
 	case "error", "Error":
-		config.Logger = Default.LogMode(logger.Error)
+		gormConfigInstance.Logger = Default.LogMode(logger.Error)
 	case "warn", "Warn":
-		config.Logger = Default.LogMode(logger.Warn)
+		gormConfigInstance.Logger = Default.LogMode(logger.Warn)
 	case "info", "Info":
-		config.Logger = Default.LogMode(logger.Info)
+		gormConfigInstance.Logger = Default.LogMode(logger.Info)
 	default:
-		config.Logger = Default.LogMode(logger.Info)
+		gormConfigInstance.Logger = Default.LogMode(logger.Info)
 	}
-	return config
+	return gormConfigInstance
 }

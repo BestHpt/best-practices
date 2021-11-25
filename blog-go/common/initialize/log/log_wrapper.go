@@ -4,69 +4,69 @@
 package log
 
 import (
-	"best-practics/common"
 	"best-practics/common/consts"
+	trace2 "best-practics/common/trace"
 	"context"
 	"go.uber.org/zap"
 )
 
-//type LogWrapper struct {
-//	logger *zap.Logger
-//}
-//
-//var Log LogWrapper
+type LogWrapper struct {
+	ZapLogger *zap.Logger
+}
+
+var wLog *LogWrapper
 
 func Debug(tag string, fields ...zap.Field) {
-	common.Logger.Debug(tag, fields...)
+	wLog.ZapLogger.Debug(tag, fields...)
 }
 
 func DebugF(ctx context.Context, tag string, fields ...zap.Field) {
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	common.Logger.Debug(tag,
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
+	wLog.ZapLogger.Debug(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Info(tag string, fields ...zap.Field) {
-	common.Logger.Info(tag, fields...)
+	wLog.ZapLogger.Info(tag, fields...)
 }
 
 func InfoF(ctx context.Context, tag string, fields ...zap.Field) {
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	common.Logger.Info(tag,
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
+	wLog.ZapLogger.Info(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Warn(tag string, fields ...zap.Field) {
-	common.Logger.Warn(tag, fields...)
+	wLog.ZapLogger.Warn(tag, fields...)
 }
 
 func WarnF(ctx context.Context, tag string, fields ...zap.Field) {
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	common.Logger.Warn(tag,
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
+	wLog.ZapLogger.Warn(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Error(tag string, fields ...zap.Field) {
-	common.Logger.Error(tag, fields...)
+	wLog.ZapLogger.Error(tag, fields...)
 }
 
 func ErrorF(ctx context.Context, tag string, fields ...zap.Field) {
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	common.Logger.Error(tag,
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
+	wLog.ZapLogger.Error(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
 
 func Fatal(tag string, fields ...zap.Field) {
-	common.Logger.Fatal(tag, fields...)
+	wLog.ZapLogger.Fatal(tag, fields...)
 }
 
 func FatalF(ctx context.Context, tag string, fields ...zap.Field) {
-	trace := ctx.Value(consts.TraceKey).(*common.Trace)
-	common.Logger.Fatal(tag,
+	trace := ctx.Value(consts.TraceKey).(*trace2.Trace)
+	wLog.ZapLogger.Fatal(tag,
 		append(fields, zap.String("trace_id", trace.TraceId), zap.Int("user_id", trace.UserId))...,
 	)
 }
