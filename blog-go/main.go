@@ -14,12 +14,15 @@ import (
 //go:generate go mod tidy
 //go:generate go mod download
 
+
 // @title Swagger Example API
 // @version 0.0.1
 // @description This is a sample Server pets
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name x-token
+// @termsOfService https://besthpt.github.io/
+
+// @contact.name besthpt.github.io
+// @contact.url 948748073@qq.com
+// @contact.email 948748073@qq.com
 // @BasePath /
 func main() {
 	//1、初始化Viper

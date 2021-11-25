@@ -72,7 +72,6 @@ zap:
   format: console
   prefix: '[best-practices]'
   director: log
-  showLine: true
   encode-level: CapitalColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true

@@ -72,7 +72,6 @@ zap:
   format: json
   prefix: '[best-practices]'
   director: log
-  showLine: true
 #  encode-level: CapitalLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
