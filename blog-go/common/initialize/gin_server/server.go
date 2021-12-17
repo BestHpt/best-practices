@@ -1,7 +1,4 @@
-/*
- * Copyright (C) 2021 Baidu, Inc. All Rights Reserved.
- */
-package server
+package gin_server
 
 import (
 	"github.com/fvbock/endless"
