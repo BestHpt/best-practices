@@ -2,6 +2,7 @@ package response
 
 import (
 	"best-practics/common/consts"
+	"best-practics/common/error_code"
 	"best-practics/common/initialize/log"
 	trace2 "best-practics/common/trace"
 	"github.com/gin-gonic/gin"
@@ -50,7 +51,12 @@ func SuccessWithMessage(c *gin.Context,message string) {
 }
 
 // 失败的业务逻辑
-func Fail(c *gin.Context, dataCode int, msg string) {
-	Result(c, dataCode, msg, map[string]interface{}{})
+func Fail(c *gin.Context) {
+	Result(c, -1, "操作失败", map[string]interface{}{})
+	c.Abort()
+}
+
+func FailWithMessage(c *gin.Context,errCode error_code.ErrCode) {
+	Result(c, errCode.Int(), errCode.String(), map[string]interface{}{})
 	c.Abort()
 }

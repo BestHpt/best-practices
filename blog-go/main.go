@@ -3,11 +3,13 @@ package main
 import (
 	"best-practics/common"
 	"best-practics/common/config"
+	"best-practics/common/initialize/gin_server"
 	"best-practics/common/initialize/log"
-	"best-practics/common/initialize/mysql"
-	"best-practics/common/initialize/router"
-	"best-practics/common/initialize/server"
 	"best-practics/common/initialize/viper"
+	"best-practics/domain/service"
+	"best-practics/infrastructure/persistence"
+	"best-practics/interfaces"
+	"best-practics/interfaces/router"
 	"fmt"
 	"go.uber.org/zap"
 )
@@ -33,18 +35,21 @@ func main() {
 	//2、初始化zap日志库
 	log.InitZap()
 	//3、gorm连接数据库
-	common.GVA_DB = mysql.Init()
-	if common.GVA_DB != nil {
-		mysql.MysqlTables(common.GVA_DB) // 初始化表
-		// 程序结束前关闭数据库链接
-		db, _ := common.GVA_DB.DB()
-		defer db.Close()
-	}
+	repositories := persistence.NewRepositories()
+	defer repositories.Close()
+
+	userService := service.NewUserService(repositories.User)
+
+	userController := interfaces.NewUserController(userService)
+
+	server := &router.Server{UserController: userController}
+
 	//4、设置routers
-	Router := router.Init()
+	Router := router.Init(server)
 	//5、初始化gin server
 	address := fmt.Sprintf(":%d", config.ConfigCenter.System.Addr)
-	s := server.Init(address, Router)
+	// TODO 优雅启动服务
+	s := gin_server.Init(address, Router)
 	log.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
@@ -53,9 +58,9 @@ func main() {
     作者:微信号：bestbear666 公众号：简凡丶
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 	默认前端文件运行地址:http://127.0.0.1:8080
-	默认后端测试路径:http://127.0.0.1%s/blog
+	默认后端测试路径:http://127.0.0.1%s/api/v1/user/1
 `, address, address)
-	log.Error(s.ListenAndServe().Error())
+	log.Fatal(s.ListenAndServe().Error())
 
 }
 

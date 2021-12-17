@@ -38,7 +38,7 @@ func SetLoggerMiddleware() gin.HandlerFunc {
 			zap.String("TraceId", uuidStr),
 			zap.Int("UserId", userId),
 			zap.String("query", c.Request.URL.RawQuery),
-			zap.String("UserAgent",c.Request.UserAgent()),
+			//zap.String("UserAgent",c.Request.UserAgent()),
 			zap.Duration("Cost",cost),
 		)
 	}

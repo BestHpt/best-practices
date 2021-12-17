@@ -36,7 +36,6 @@ mysql:
   password: 123456
   max-idle-conns: 0
   max-open-conns: 0
-  log-mode: ""
   log-zap: false
 redis:
   db: 0
@@ -45,7 +44,6 @@ redis:
 system:
   env: public
   addr: 8888
-  db-type: mysql
   oss-type: local
   use-multipoint: false
   iplimit-count: 15000
