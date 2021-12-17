@@ -1,4 +1,3 @@
-
 package service
 
 import (
@@ -6,6 +5,7 @@ import (
 	"best-practics/common/initialize/viper"
 	"best-practics/domain/entity"
 	"best-practics/infrastructure/persistence"
+	"context"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
@@ -29,13 +29,13 @@ func TestCreateUser_Success(t *testing.T) {
 		Email:     "steven@example.com",
 		Password:  "password",
 	}
-	err := userSeviceInstance.CreateUserService(user)
+	err := userSeviceInstance.CreateUserService(context.TODO(), user)
 	assert.Nil(t, err)
 }
 
 func TestGetUser_Success(t *testing.T) {
-	userId := uint64(1)
-	u, err := userSeviceInstance.GetUserService(userId)
+	userId := int64(1)
+	u, err := userSeviceInstance.GetUserService(context.TODO(), userId)
 	assert.Nil(t, err)
 	assert.EqualValues(t, u.FirstName, "victoria")
 	assert.EqualValues(t, u.LastName, "steven")
