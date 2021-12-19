@@ -14,11 +14,11 @@ import (
 
 //UserController struct defines the dependencies that will be used
 type UserController struct {
-	us service.UserService
+	us service.IUserService
 }
 
 //UserController constructor
-func NewUserController(us service.UserService) *UserController {
+func NewUserController(us service.IUserService) *UserController {
 	return &UserController{
 		us: us,
 	}
@@ -82,3 +82,4 @@ func (s *UserController) GetUsers(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, users.PublicUsers())
 }
+

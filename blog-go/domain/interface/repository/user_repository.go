@@ -4,7 +4,7 @@ import (
 	"best-practics/domain/entity"
 )
 
-type UserRepository interface {
+type IUserRepository interface {
 	CreateUser(*entity.User) error
 	GetUser(int64) (*entity.User, error)
 	GetUsers() ([]entity.User, error)

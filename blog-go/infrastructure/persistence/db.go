@@ -12,7 +12,7 @@ import (
 )
 
 type Repositories struct {
-	User repository.UserRepository
+	User repository.IUserRepository
 	db   *gorm.DB
 }
 

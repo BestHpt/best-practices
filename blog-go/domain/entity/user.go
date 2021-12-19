@@ -1,6 +1,7 @@
 package entity
 
 import (
+	"best-practics/common"
 	"github.com/badoux/checkmail"
 	"html"
 	"strings"
@@ -8,14 +9,11 @@ import (
 )
 
 type User struct {
-	ID        uint64     `gorm:"primary_key;auto_increment" json:"id"`
+	*common.BaseModel
 	FirstName string     `gorm:"size:100;not null;" json:"first_name"`
 	LastName  string     `gorm:"size:100;not null;" json:"last_name"`
 	Email     string     `gorm:"size:100;not null;unique" json:"email"`
 	Password  string     `gorm:"size:100;not null;" json:"password"`
-	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
-	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
 type PublicUser struct {
