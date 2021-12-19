@@ -14,8 +14,8 @@ func NewUserDao(db *gorm.DB) *UserDao {
 	return &UserDao{db}
 }
 
-//UserDao implements the repository.UserRepository interface
-var _ repository.UserRepository = &UserDao{}
+//UserDao implements the repository.IUserRepository interface
+var _ repository.IUserRepository = &UserDao{}
 
 func (r *UserDao) CreateUser(user *entity.User) error {
 	return r.db.Create(&user).Error

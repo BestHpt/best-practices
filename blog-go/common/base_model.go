@@ -5,7 +5,8 @@ import (
 )
 
 type BaseModel struct {
-	ID        uint           `gorm:"primarykey"` // 主键ID
-	CreatedAt time.Time      // 创建时间
-	UpdatedAt time.Time      // 更新时间
+	ID        uint64       `gorm:"primarykey"` // 主键ID
+	CreatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt time.Time  `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }

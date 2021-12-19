@@ -1,4 +1,3 @@
-
 package service
 
 import (
@@ -9,14 +8,14 @@ import (
 
 // 表名app依赖下一层的哪些接口，需要手工注入
 type userService struct {
-	userDao repository.UserRepository
+	userDao repository.IUserRepository
 }
 
-func NewUserService(userDao repository.UserRepository) UserService {
+func NewUserService(userDao repository.IUserRepository) IUserService {
 	return &userService{userDao: userDao}
 }
 
-type UserService interface {
+type IUserService interface {
 	CreateUserService(ctx context.Context,user *entity.User) error
 	GetUserService(ctx context.Context,userId int64) (*entity.User, error)
 	GetUserList(ctx context.Context) ([]entity.User, error)
