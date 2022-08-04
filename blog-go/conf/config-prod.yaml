@@ -48,13 +48,6 @@ system:
   use-multipoint: false
   iplimit-count: 15000
   iplimit-time: 3600
-tencent-cos:
-  bucket: xxxxx-10005608
-  region: ap-shanghai
-  secret-id: xxxxxxxx
-  secret-key: xxxxxxxx
-  base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 timer:
   start: true
   spec: '@daily'
@@ -69,7 +62,7 @@ zap:
   level: info
   format: json
   prefix: '[best-practices]'
-  director: log
+  director: logs
 #  encode-level: CapitalLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true

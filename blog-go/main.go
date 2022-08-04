@@ -32,7 +32,7 @@ import (
 func main() {
 	//1、初始化Viper
 	common.Viper = viper.Init()
-	//2、初始化zap日志库
+	//2、初始化zap日志
 	log.InitZap()
 	//3、gorm连接数据库
 	repositories := persistence.NewRepositories()
