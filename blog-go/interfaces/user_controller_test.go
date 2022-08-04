@@ -9,6 +9,7 @@ import (
 	"best-practics/infrastructure/persistence"
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -54,7 +55,7 @@ func TestGetUser_Success(t *testing.T) {
 
 	//assert.Nil(t, err)
 	assert.Equal(t, rr.Code, 200)
-	assert.NotNil(t, user,"返回用户为空")
+	assert.NotNil(t, user, "返回用户为空")
 	assert.EqualValues(t, user.FirstName, "victor")
 	assert.EqualValues(t, user.LastName, "steven")
 }
